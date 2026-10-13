@@ -9,6 +9,9 @@ class Peminjaman extends Model
 {
     use HasFactory;
 
+    // Tambahkan baris ini agar Eloquent membaca nama tabel 'peminjamans' dengan benar
+    protected $table = 'peminjamans';
+
     protected $fillable = [
         'kode_pinjam',
         'buku_id',
