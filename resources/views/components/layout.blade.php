@@ -82,9 +82,9 @@
         }
     </style>
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
 
-    <!-- Header Navbar tanpa strip kaku -->
+    <!-- Header Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark navbar-del mb-4 py-3">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center gap-3" href="{{ route('buku.index') }}">
@@ -114,18 +114,41 @@
                             <i class="bi bi-grid-fill me-1 text-warning"></i> Katalog Buku
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="btn btn-warning text-dark fw-bold rounded-pill px-3 py-1 fs-7" href="{{ route('buku.create') }}">
-                            <i class="bi bi-plus-circle-fill me-1"></i> Tambah Data
-                        </a>
-                    </li>
+
+                    {{-- Tombol Tambah Data & Sesi Auth Pustakawan --}}
+                    @auth
+                        <li class="nav-item">
+                            <a class="btn btn-warning text-dark fw-bold rounded-pill px-3 py-1 fs-7" href="{{ route('buku.create') }}">
+                                <i class="bi bi-plus-circle-fill me-1"></i> Tambah Data
+                            </a>
+                        </li>
+                        <li class="nav-item ms-lg-2">
+                            <span class="badge bg-white text-dark py-2 px-3 rounded-pill">
+                                <i class="bi bi-person-circle text-primary me-1"></i> Pustakawan Sesi Aktif
+                            </span>
+                        </li>
+                        <li class="nav-item">
+                            <form action="{{ route('logout') }}" method="POST" class="d-inline">
+                                @csrf
+                                <button type="submit" class="btn btn-sm btn-outline-light rounded-pill px-3 py-1">
+                                    <i class="bi bi-box-arrow-right me-1"></i> Keluar
+                                </button>
+                            </form>
+                        </li>
+                    @else
+                        <li class="nav-item ms-lg-2">
+                            <a href="{{ route('login') }}" class="btn btn-sm btn-warning text-dark fw-bold rounded-pill px-3 py-1">
+                                <i class="bi bi-shield-lock-fill me-1"></i> Login Pustakawan
+                            </a>
+                        </li>
+                    @endauth
                 </ul>
             </div>
         </div>
     </nav>
 
     <!-- Main Content Container -->
-    <div class="container pb-5">
+    <main class="container flex-grow-1 pb-5">
         @if(session('success'))
             <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm rounded-4 mb-4 p-3 d-flex align-items-center gap-2" role="alert">
                 <i class="bi bi-check-circle-fill fs-4 text-success"></i>
@@ -134,8 +157,16 @@
             </div>
         @endif
 
+        @if(session('error'))
+            <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm rounded-4 mb-4 p-3 d-flex align-items-center gap-2" role="alert">
+                <i class="bi bi-exclamation-triangle-fill fs-4 text-danger"></i>
+                <div class="fw-semibold">{{ session('error') }}</div>
+                <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
         {{ $slot }}
-    </div>
+    </main>
 
     <!-- Footer dengan Aksen Lis Gold & Motto MarTuhan, Marroha, Marbisuk -->
     <footer class="mt-auto py-4 bg-white border-top">
@@ -151,4 +182,4 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-</html>
+</html> 
