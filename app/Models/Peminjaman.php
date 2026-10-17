@@ -4,12 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Peminjaman extends Model
 {
     use HasFactory;
 
-    // Tambahkan baris ini agar Eloquent membaca nama tabel 'peminjamans' dengan benar
+    // Menghindari error "Table peminjamen doesn't exist"
     protected $table = 'peminjamans';
 
     protected $fillable = [
@@ -23,7 +24,7 @@ class Peminjaman extends Model
         'status',
     ];
 
-    public function buku()
+    public function buku(): BelongsTo
     {
         return $this->belongsTo(Buku::class);
     }

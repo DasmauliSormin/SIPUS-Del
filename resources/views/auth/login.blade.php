@@ -15,20 +15,20 @@
     <div class="container" style="max-width: 420px;">
         <div class="card card-login bg-white overflow-hidden p-4">
             <div class="text-center mb-4">
-                <img src="{{ asset('images/DEL.png') }}" height="50" alt="Logo IT Del" class="mb-2">
+                <img src="{{ asset('images/DEL.png') }}" height="50" alt="Logo IT Del" class="mb-2" onerror="this.onerror=null; this.src='https://www.del.ac.id/wp-content/uploads/2018/10/logo-del.png';">
                 <h4 class="fw-bold text-dark">Portal Pustakawan</h4>
                 <p class="text-muted small">Sistem Informasi Perpustakaan IT Del</p>
             </div>
 
-            @if($errors->any())
+            @if(session('error'))
                 <div class="alert alert-danger small rounded-3 mb-3">
-                    {{ $errors->first() }}
+                    {{ session('error') }}
                 </div>
             @endif
 
-            @if(session('success'))
-                <div class="alert alert-success small rounded-3 mb-3">
-                    {{ session('success') }}
+            @if($errors->any())
+                <div class="alert alert-danger small rounded-3 mb-3">
+                    {{ $errors->first() }}
                 </div>
             @endif
 

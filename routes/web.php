@@ -5,21 +5,31 @@ use App\Http\Controllers\BukuController;
 use App\Http\Controllers\PeminjamanController;
 use Illuminate\Support\Facades\Route;
 
-// Guest Routes (Login)
+// Redirect Halaman Utama
+Route::get('/', function () {
+    return redirect()->route('buku.index');
+});
+
+// Katalog Utama & Detail Buku (Publik)
+Route::get('/buku', [BukuController::class, 'index'])->name('buku.index');
+Route::get('/buku/{buku}', [BukuController::class, 'show'])->name('buku.show');
+
+// Guest Routes (Login Pustakawan)
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login']);
 });
 
-// Protected Mutational Routes (Auth Middleware)
+// Protected Mutational Routes (Wajib Auth)
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-    Route::get('/', function () {
-        return redirect()->route('buku.index');
-    });
-
-    Route::resource('buku', BukuController::class);
+    // Manajemen Buku (Create, Store, Edit, Update, Destroy)
+    Route::get('/buku/create', [BukuController::class, 'create'])->name('buku.create');
+    Route::post('/buku', [BukuController::class, 'store'])->name('buku.store');
+    Route::get('/buku/{buku}/edit', [BukuController::class, 'edit'])->name('buku.edit');
+    Route::put('/buku/{buku}', [BukuController::class, 'update'])->name('buku.update');
+    Route::delete('/buku/{buku}', [BukuController::class, 'destroy'])->name('buku.destroy');
     
     // Transaksi Sirkulasi
     Route::post('/peminjaman', [PeminjamanController::class, 'store'])->name('peminjaman.store');

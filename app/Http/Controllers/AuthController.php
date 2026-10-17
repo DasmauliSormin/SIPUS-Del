@@ -17,32 +17,30 @@ class AuthController extends Controller
     {
         $credentials = $request->validate([
             'email' => 'required|email',
-            'password' => 'required',
+            'password' => 'required|string',
         ]);
 
         if (Auth::attempt($credentials)) {
-            // Wajib regenerate session ID demi keamanan
+            // Regenerasi ID Sesi Wajib untuk Keamanan
             $request->session()->regenerate();
+            
+            session(['login_timestamp' => now()->format('d M Y, H:i:s') . ' WIB']);
+            Cookie::queue('del_last_pustakawan_email', $request->email, 10080);
 
-            // Menyimpan cookie HttpOnly untuk audit sesi pustakawan
-            Cookie::queue('last_pustakawan_login', Auth::user()->email, 60 * 24, null, null, false, true);
-
-            return redirect()->intended(route('buku.index'))->with('success', 'Selamat datang kembali, Pustakawan Del!');
+            return redirect()->route('buku.index');
         }
 
-        return back()->withErrors([
-            'email' => 'Kredensial email atau password pustakawan salah.',
-        ])->onlyInput('email');
+        return back()->with('error', 'Kredensial email atau password tidak valid.');
     }
 
     public function logout(Request $request)
     {
         Auth::logout();
 
-        // Wajib invalidate & regenerate CSRF token
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('login')->with('success', 'Berhasil keluar dari sistem.');
+        // Redirect langsung tanpa membawa flash message success
+        return redirect()->route('login');
     }
 }

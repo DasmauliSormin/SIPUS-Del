@@ -22,17 +22,11 @@ class Buku extends Model
         'sinopsis',
     ];
 
-    /**
-     * Relasi belongsTo ke Kategori
-     */
     public function kategori(): BelongsTo
     {
         return $this->belongsTo(Kategori::class);
     }
 
-    /**
-     * Relasi hasMany ke Peminjaman (Spesifikasi Minggu 6)
-     */
     public function peminjamans(): HasMany
     {
         return $this->hasMany(Peminjaman::class);
